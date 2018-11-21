@@ -110,7 +110,7 @@
 
 		private function getItemCostFromInventory($userId){
 			$itemarray = array();
-			$stmt = $this->con->prepare("SELECT `item` FROM `inventory` WHERE `profile` = ?");
+			$stmt = $this->con->prepare("SELECT `item` FROM `inventory` WHERE `user_id` = ?");
 			$stmt->bind_param("s",$userid);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -134,7 +134,52 @@
 			}
 			return $itemnames;
 		}
+		//--------------------------------------------
+		public function UpdateStats($profile,$item){
+			$newStats = GetUpdatedStats($profile,item);
+			$stmt = $this->con->prepare("UPDATE `status` SET `current_health` = ? , `max_health` = ? `current_mp` = ?,`max_mp` = ? , `current_strength` = ? ,` max_strength` = ?,`current_speed` = ?,`max_speed` = ? ,`current_intelligence` = ? , `max_intelligence` = ? ,`current_wisdom` = ? ,`max_wisdom` = ?");
+			$stmt->bind_param("iiiiiiiiii",$newStats[0],$newStats[1],$newStats[2],$newStats[3],$newStats[4],$newStats[5],$newStats[6],$newStats[7],$newStats[8],$newStats[9]);
+			$stmt->execute();
+			echo $stmt->rowCount() . " records UPDATED successfully";
+		}
+		private function GetUpdatedStats($profile,$item){
+			$newStatsArray = array();
+			$i = 0;
 
+			$effectsArray = splitEffectIntoList(getEffectOfItem($item));
+			$statsArray = getStatsFromProfile($profile);
+
+			foreach($statsArray as $stat){
+				array_push($newStatsArray,$stat + $effectsArray[i])
+				i = i + 1;
+			}
+			return $newStatsArray
+		}
+		private function getStatsFromProfile($profile){
+			$stmt = $this->con->prepare("SELECT * FROM `status` WHERE `profile` = ?");
+			$stmt->bind_param("i",$profile);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$row = $result->fetch_array(MYSQLI_NUM);
+			$statsArray = array_values($row)['current_health','max_health','current_mp','max_mp','current_strength','max_strength','current_speed','max_speed','current_intelligence','max_intelligence','current_wisdom','max_wisdom'];
+			return $statsArray;
+		}
+
+		private function splitEffectIntoList($effect){
+			$array = explode("," , $effect);
+			return $array;
+		}
+		
+		private function getEffectOfItem($item){
+			$itemarray = array();
+			$stmt = $this->con->prepare("SELECT `effect` FROM `inventory` WHERE `item_id` = ?");
+			$stmt->bind_param("i",$item);
+			$stmt->execute();
+			$row = $result->fetch_array(MYSQLI_NUM);
+			$effect = array_values($row)[0];
+			return $effect
+
+		}
 	}
 		
 ?>
