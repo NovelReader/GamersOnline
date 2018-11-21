@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\GamersOnline",
+    "\\GamersOnline\\Includes",
+    "\\GamersOnline\\Methods"
   ],
+  "SelectedNode": "\\GamersOnline\\Includes\\GamersOperations.php",
   "PreviewInSolutionExplorer": false
 }
