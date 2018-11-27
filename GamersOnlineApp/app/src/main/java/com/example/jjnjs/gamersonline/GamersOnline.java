@@ -1,7 +1,9 @@
 package com.example.jjnjs.gamersonline;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -28,6 +30,8 @@ public class GamersOnline extends AppCompatActivity {
     }
 
     public void getStuff(){
+        //Request method
+        //Url to access
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "",
                 new Response.Listener<String>() {
                     @Override
@@ -53,8 +57,12 @@ public class GamersOnline extends AppCompatActivity {
             }
         };
 
-
         RequestQueue requestQueue = Volley.newRequestQueue(GamersOnline.this);
         requestQueue.add(stringRequest);
+    }
+
+    public void tryLogin(View view) {
+        Intent intent = new Intent(this, ProfileView.class);
+        startActivity(intent);
     }
 }
