@@ -5,22 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ProfileView">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rowCount="2"
-            android:columnCount="3">
-            <StackView android:layout_row="0" android:layout_column="0">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Username"/>
-            </StackView>
-        </GridLayout>
-
-    </RelativeLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="10"
+        android:rowCount="10">
+        <TextView android:layout_row="0" android:layout_column="0"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="User name" android:padding="10dp"/>
+        <TextView android:layout_row="1" android:layout_column="0"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Server Image" android:padding="10dp"/>
+        <Button android:layout_row="2" android:layout_column="0"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="View stats" android:padding="10dp" android:onClick="showStats"/>
+    </GridLayout>
 
 </android.support.constraint.ConstraintLayout>

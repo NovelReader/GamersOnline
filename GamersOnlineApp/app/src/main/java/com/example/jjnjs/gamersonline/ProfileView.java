@@ -1,7 +1,11 @@
 package com.example.jjnjs.gamersonline;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -24,5 +28,19 @@ public class ProfileView extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
+    }
+
+    public void getImage(){
+        Bitmap imageBitmap;
+        /*
+        byte[] decode = Base64.decode(jsonObject.getString("Image String Name"),0);
+        imagebitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+        ImageName.setImageDrawable(imagebitmap);
+        */
+
+        //return imageBitmap;
+    }
+
+    public void showStats(View view) {
     }
 }
