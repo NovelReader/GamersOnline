@@ -51,8 +51,19 @@ public class GamersOnline extends AppCompatActivity {
                             //JSONObject jsonObject = new JSONObject(response)
                             json = new JSONObject(response);
                             System.out.println(json.toString(4));
-                            String name = json.getString("Name");
-                            Toast.makeText(GamersOnline.this, name, Toast.LENGTH_LONG).show();
+                            Boolean error = json.getBoolean("error");
+                            String message = json.getString("Message");
+                            if(error.equals(true)){
+                                if(message.matches("Logged In")){
+                                    String name = json.getString("Name");
+                                    String image = json.getString("Image");
+                                    String user = json.getString("User");
+                                    String currency = json.getString("Currency");
+                                }else{
+                                    Toast.makeText(GamersOnline.this, message, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            
                             successLogin = true;
                         } catch (JSONException e) {
                             e.printStackTrace();
