@@ -36,15 +36,23 @@ public class GamersOnline extends AppCompatActivity {
     }
 
     public void getStuff(){
+        EditText emailIn = (EditText)findViewById(R.id.email);
+        TextView passIn = (TextView)findViewById(R.id.pass);
+        System.out.println("\n\tUser emaail: " + emailIn.getText().toString());
+        System.out.println("\t User pass: " + passIn.getText().toString());
+        final String email = emailIn.getText().toString();
+        final String password =  passIn.getText().toString();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "Http://18.219.55.178/GamersOnline/Methods/profile.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
+
                             //JSONObject jsonObject = new JSONObject(response)
                             json = new JSONObject(response);
                             System.out.println(json.toString(4));
+                            String name = json.getString("Name");
+                            Toast.makeText(GamersOnline.this, name, Toast.LENGTH_LONG).show();
                             successLogin = true;
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -54,17 +62,15 @@ public class GamersOnline extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(GamersOnline.this, "Error",  Toast.LENGTH_LONG).show();
+                        Toast.makeText(GamersOnline.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                EditText emailIn = (EditText)findViewById(R.id.email);
-                TextView passIn = (TextView)findViewById(R.id.pass);
                 Map<String, String> params = new HashMap<>();
-                System.out.println("\n\tUser emaail: " + emailIn.getText().toString());
-                System.out.println("\t User pass: " + passIn.getText().toString());
-                params.put("username", emailIn.getText().toString());
-                params.put("password", passIn.getText().toString());
+                params.put("Email", email);
+                params.put("Password",password);
                 return params;
             }
         };
