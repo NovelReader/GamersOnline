@@ -54,7 +54,6 @@ public class GamersOnline extends AppCompatActivity {
                         try {
                             //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
                             JSONObject json = new JSONObject(response);             //Create Json from the response
-                            System.out.println(json.toString(4));
                             Boolean hasError = json.getBoolean("error");     //Using hasError to see if the php succeeded
                             String message = json.getString("message");
                             if(!hasError){      //If no error

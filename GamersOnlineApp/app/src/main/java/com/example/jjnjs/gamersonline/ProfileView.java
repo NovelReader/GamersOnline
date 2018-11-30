@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,6 @@ public class ProfileView extends AppCompatActivity{
         setContentView(R.layout.activity_profile_view);
         fetchServerImage();
 
-
         userNameTextView = findViewById(R.id.userName);
         userNameTextView.setText(getIntent().getStringExtra("profileName"));
         userNameTextView = null;
@@ -68,6 +68,9 @@ public class ProfileView extends AppCompatActivity{
         }
 
         fetchInventory();
+        for(Item i : inventory){
+            System.out.println("\t---Item Name: " + i.name);
+        }
     }
 
     public void fetchServerImage(){
@@ -122,16 +125,14 @@ public class ProfileView extends AppCompatActivity{
                                 JSONArray costs = json.getJSONArray("cost");
                                 JSONArray descriptions = json.getJSONArray("description");
                                 JSONArray images = json.getJSONArray("image");
-
+                                ArrayList<Item> items = new ArrayList<>();
                                 for(int i = 0; i < names.length(); i++){
-
                                     Item newItem = new Item(names.getString(i), numbers.getInt(i),
                                             costs.getInt(i), descriptions.getString(i),
                                             images.getString(i));
-                                    System.out.println(String.format("\t---Item Name: %s", newItem.name));
-                                    System.out.println(String.format("\t---Orig Name: %s", names.getString(i)));
-                                    inventory.add(newItem);
+                                    items.add(newItem);
                                 }
+                                populateInventory(items);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,12 +158,14 @@ public class ProfileView extends AppCompatActivity{
         requestQueue.add(stringRequest);
     }
 
-    private void updateInventoryListView(){
+    public void showStats(View view) {
 
     }
 
-    public void showStats(View view) {
-
+    private void populateInventory(ArrayList<Item> inItems){
+        inventoryListView = findViewById(R.id.Items);
+        ArrayAdapter<Item> aa = new ArrayAdapter<Item>(this, android.R.layout.simple_expandable_list_item_1, inItems);
+        inventoryListView.setAdapter(aa);
     }
 }
 
@@ -186,6 +189,7 @@ class Item{
 
     @Override
     public String toString(){
-        return String.format("Item: %s\tAmount: %d", name, number);
+        return String.format("Item: %s\tAmount: %d\n" +
+                "Price: %d\bDescription: %s", name, number, cost,  description);
     }
 }
