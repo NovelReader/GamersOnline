@@ -46,25 +46,28 @@ public class GamersOnline extends AppCompatActivity {
     }
 
     public void getStuff(){
-        System.out.println("\n---\tCalled getStuff()\n");
+        //Edit the url as required to access the php file
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/profile.php",
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(String response) {       //Function that handles the php's response
                         try {
                             //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
-                            JSONObject json = new JSONObject(response);
+                            JSONObject json = new JSONObject(response);             //Create Json from the response
                             System.out.println(json.toString(4));
-                            Boolean hasError = json.getBoolean("error");
+                            Boolean hasError = json.getBoolean("error");     //Using hasError to see if the php succeeded
                             String message = json.getString("message");
-                            if(!hasError){
+                            if(!hasError){      //If no error
                                 if(message.matches("Logged In.")) {
+                                    //Have to modify class based data from outside of here
                                     login(json.getString("User"), json.getString("Name"),
                                             json.getString("Image") ,json.getString("Currency"));
                                 }
                                 else{
+                                    //Output the error message
                                     Toast.makeText(GamersOnline.this, message, Toast.LENGTH_LONG).show();
                                 }
+                                //clearing json
                                 json = null;
                             }
                         } catch (JSONException e) {
@@ -72,7 +75,7 @@ public class GamersOnline extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
+                new Response.ErrorListener() {          //Error handler for no response etc
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println("\n\t---\tError response.\n");
@@ -80,12 +83,10 @@ public class GamersOnline extends AppCompatActivity {
                     }
                 }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() throws AuthFailureError {     //Place the Values for your request
                 EditText emailIn = (EditText)findViewById(R.id.email);
                 TextView passIn = (TextView)findViewById(R.id.pass);
                 Map<String, String> params = new HashMap<>();
-                System.out.println("\tUser emaail: " + emailIn.getText().toString());
-                System.out.println("\t User pass: " + passIn.getText().toString());
                 params.put("Email", emailIn.getText().toString());
                 params.put("Password", passIn.getText().toString());
                 return params;
@@ -94,7 +95,7 @@ public class GamersOnline extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(GamersOnline.this);
         requestQueue.add(stringRequest);
-        buttonPressed = false;
+        buttonPressed = false;      //For stopping multiple page logins
     }
 
     //Function tied to the sign in button
@@ -103,18 +104,23 @@ public class GamersOnline extends AppCompatActivity {
     }
 
     public void login(String userID,String userName,String imageInText,String userCurrency){
-        if(buttonPressed) return;
-        buttonPressed = true;
-        Intent in = new Intent(this, ProfileView.class);
-        byte[] decode = Base64.decode(imageInText, Base64.DEFAULT);
-        Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+        if(buttonPressed) return;       //Exit the function if a query is still running
+        buttonPressed = true;           //Lock out other functions
+        Intent in = new Intent(this, ProfileView.class);        //New window
+
+        //The image was too big so to transfer it, it had to be compressed
+        byte[] decode = Base64.decode(imageInText, Base64.DEFAULT);     //Convert the string into bytes
+        Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);       //Convert bytes to a bitmap
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);
+
+        //Pass these values to the new window "in"
         in.putExtra("playerId", userID)
                 .putExtra("profileName", userName)
                 .putExtra("playerMoney", userCurrency)
                 .putExtra("profileImage", bs.toByteArray());
 
+        //Open the new window
         startActivity(in);
     }
 }

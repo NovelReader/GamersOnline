@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileView extends AppCompatActivity{
-    private ArrayList<Item> inventory = new ArrayList<Item>();
+    public static ArrayList<Item> inventory = new ArrayList<Item>();
 
     private TextView userNameTextView;
     private TextView userCurrencyTextView;
@@ -43,9 +43,9 @@ public class ProfileView extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchInventory();
         setContentView(R.layout.activity_profile_view);
         fetchServerImage();
+
 
         userNameTextView = findViewById(R.id.userName);
         userNameTextView.setText(getIntent().getStringExtra("profileName"));
@@ -67,7 +67,7 @@ public class ProfileView extends AppCompatActivity{
                     "Currency: " + getIntent().getStringExtra("playerMoney") + " shekel");
         }
 
-
+        fetchInventory();
     }
 
     public void fetchServerImage(){
@@ -124,9 +124,12 @@ public class ProfileView extends AppCompatActivity{
                                 JSONArray images = json.getJSONArray("image");
 
                                 for(int i = 0; i < names.length(); i++){
+
                                     Item newItem = new Item(names.getString(i), numbers.getInt(i),
                                             costs.getInt(i), descriptions.getString(i),
                                             images.getString(i));
+                                    System.out.println(String.format("\t---Item Name: %s", newItem.name));
+                                    System.out.println(String.format("\t---Orig Name: %s", names.getString(i)));
                                     inventory.add(newItem);
                                 }
                             }
