@@ -9,52 +9,85 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/MainLayout">
-        <GridLayout
+        android:id="@+id/MainLayout"
+        android:orientation="horizontal"
+        android:alpha=".6">
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:rowCount="6">
+
+        <TextView
+            android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:paddingStart="10dp"
-            android:paddingLeft="10dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:rowCount="4">
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="User name"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:text="User name"
-                android:textSize="24sp" />
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_row="1"
+            android:layout_column="0" />
 
-            <ImageView
-                android:id="@+id/profileImage"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_row="1"
-                android:layout_column="0" />
+        <TextView
+            android:id="@+id/currencyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="Currency: 1 Billion Shekels"
+            android:textColor="@android:color/black" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="3"
-                android:layout_column="0"
-                android:onClick="showStats"
-                android:text="View stats" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:onClick="showStats"
+            android:text="View stats" />
 
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_column="0"
-                android:layout_row="2"
-                android:text="Currency: 1 Billion Shekels"
-                android:id="@+id/currencyTextView"
-                />
-        </GridLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/personalWealth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:text="Personal Net Worth: "
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/serverWealth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:text="Server Net Worth: "
+            android:textColor="@android:color/black" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowSpan="6"
+            android:layout_column="1"
+            android:id="@+id/Items">
+
+        </ListView>
+    </GridLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>

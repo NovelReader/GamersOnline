@@ -1,5 +1,6 @@
 package com.example.jjnjs.gamersonline;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,13 +37,20 @@ public class ProfileView extends AppCompatActivity{
     private TextView userNameTextView;
     private TextView userCurrencyTextView;
     private ImageView userProfileImageView;
+    private TextView personalWealthTextView;
+    private TextView serverWealthTextView;
+    private ListView inventoryListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fetchInventory();
         setContentView(R.layout.activity_profile_view);
+        fetchServerImage();
+
         userNameTextView = findViewById(R.id.userName);
         userNameTextView.setText(getIntent().getStringExtra("profileName"));
         userNameTextView = null;
+
         if(getIntent().hasExtra("profileImage")){
             userProfileImageView = findViewById(R.id.profileImage);
             Bitmap b = BitmapFactory.decodeByteArray(
@@ -50,12 +60,14 @@ public class ProfileView extends AppCompatActivity{
             userProfileImageView.setImageBitmap(b);
             userProfileImageView = null;
         }
+
         if(getIntent().hasExtra("playerMoney")){
             userCurrencyTextView = findViewById(R.id.currencyTextView);
             userCurrencyTextView.setText(
                     "Currency: " + getIntent().getStringExtra("playerMoney") + " shekel");
         }
-        //fetchServerImage();
+
+
     }
 
     public void fetchServerImage(){
@@ -64,19 +76,13 @@ public class ProfileView extends AppCompatActivity{
                     @Override
                     public void onResponse(String response) {
                         try {
-                            //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProfileView.this, "Made IT", Toast.LENGTH_LONG).show();
                             JSONObject json = new JSONObject(response);
-                            Boolean hasError = json.getBoolean("error");
-                            String message = json.getString("message");
-                            if(hasError){
-                                Toast.makeText(ProfileView.this, message, Toast.LENGTH_LONG).show();
-                            } else {
-                                if(json.has("Image")){
-                                    byte[] decode = Base64.decode(json.getString("Image"), Base64.DEFAULT);
-                                    Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
-                                    BitmapDrawable bd = new BitmapDrawable(imageBitmap);
-                                    findViewById(R.id.MainLayout).setBackgroundDrawable(bd);
-                                }
+                            if(json.has("image")){
+                                byte[] decode = Base64.decode(json.getString("image"), Base64.DEFAULT);
+                                Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+                                BitmapDrawable bd = new BitmapDrawable(imageBitmap);
+                                findViewById(R.id.MainLayout).setBackgroundDrawable(bd);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -110,25 +116,18 @@ public class ProfileView extends AppCompatActivity{
                         try {
                             //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
                             JSONObject json = new JSONObject(response);
-                            Boolean hasError = json.getBoolean("error");
-                            String message = json.getString("message");
-                            if(hasError){
-                                Toast.makeText(ProfileView.this, message, Toast.LENGTH_LONG).show();
-                            } else {
-                                if(json.has("name")){
-                                    JSONArray names = json.getJSONArray("name");
-                                    JSONArray numbers = json.getJSONArray("number");
-                                    JSONArray costs = json.getJSONArray("cost");
-                                    JSONArray descriptions = json.getJSONArray("description");
-                                    JSONArray images = json.getJSONArray("image");
+                            if(json.has("name")){
+                                JSONArray names = json.getJSONArray("name");
+                                JSONArray numbers = json.getJSONArray("number");
+                                JSONArray costs = json.getJSONArray("cost");
+                                JSONArray descriptions = json.getJSONArray("description");
+                                JSONArray images = json.getJSONArray("image");
 
-                                    for(int i = 0; i < names.length(); i++){
-                                        inventory.add(
-                                                new Item(names.getString(i), numbers.getInt(i),
-                                                        costs.getInt(i), descriptions.getString(i),
-                                                        images.getString(i))
-                                        );
-                                    }
+                                for(int i = 0; i < names.length(); i++){
+                                    Item newItem = new Item(names.getString(i), numbers.getInt(i),
+                                            costs.getInt(i), descriptions.getString(i),
+                                            images.getString(i));
+                                    inventory.add(newItem);
                                 }
                             }
                         } catch (JSONException e) {
@@ -155,6 +154,10 @@ public class ProfileView extends AppCompatActivity{
         requestQueue.add(stringRequest);
     }
 
+    private void updateInventoryListView(){
+
+    }
+
     public void showStats(View view) {
 
     }
@@ -176,5 +179,10 @@ class Item{
         Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
         decode = null;
         this.image = imageBitmap;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Item: %s\tAmount: %d", name, number);
     }
 }
