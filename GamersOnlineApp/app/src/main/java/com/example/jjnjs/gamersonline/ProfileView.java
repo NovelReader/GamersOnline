@@ -39,6 +39,25 @@ public class ProfileView extends AppCompatActivity{
     private ImageView userProfileImageView;
     private TextView personalWealthTextView;
     private TextView serverWealthTextView;
+
+    private TextView currentHealth;
+    private TextView currentMP;
+    private TextView currentStrength;
+    private TextView currentSpeed;
+    private TextView currentIntelligence;
+    private TextView currentWisdom;
+
+    private TextView maxHealth;
+    private TextView maxMP;
+    private TextView maxStrength;
+    private TextView maxSpeed;
+    private TextView maxIntelligence;
+    private TextView maxWisdom;
+
+
+
+
+
     private ListView inventoryListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +69,24 @@ public class ProfileView extends AppCompatActivity{
         userNameTextView = findViewById(R.id.userName);
         userNameTextView.setText(getIntent().getStringExtra("profileName"));
         userNameTextView = null;
+
+        personalWealthTextView = (TextView) findViewById(R.id.personalWealth);
+        serverWealthTextView = (TextView) findViewById(R.id.serverWealth);
+
+        currentHealth = (TextView) findViewById(R.id.currentHealth);
+        currentMP = (TextView) findViewById(R.id.currentMp);
+        currentStrength = (TextView) findViewById(R.id.currentStrength);
+        currentSpeed = (TextView) findViewById(R.id.currentSpeed);
+        currentIntelligence = (TextView) findViewById(R.id.currentIntelligence);
+        currentWisdom = (TextView) findViewById(R.id.currentWisdom);
+
+        maxHealth = (TextView) findViewById(R.id.maxHealth);
+        maxMP = (TextView) findViewById(R.id.maxMp);
+        maxStrength = (TextView) findViewById(R.id.maxStrength);
+        maxSpeed = (TextView) findViewById(R.id.maxSpeed);
+        maxIntelligence = (TextView) findViewById(R.id.maxIntelligence);
+        maxWisdom = (TextView) findViewById(R.id.maxWisdom);
+
 
         if(getIntent().hasExtra("profileImage")){
             userProfileImageView = findViewById(R.id.profileImage);
@@ -68,6 +105,8 @@ public class ProfileView extends AppCompatActivity{
         }
 
         fetchInventory();
+        getPersonalWealth();
+        getServerWealth();
     }
 
     public void fetchServerImage(){
@@ -162,7 +201,118 @@ public class ProfileView extends AppCompatActivity{
     }
 
     public void showStats(View view) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/getstats.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Toast.makeText(ProfileView.this, "Made IT", Toast.LENGTH_LONG).show();
+                            JSONObject json = new JSONObject(response);
+                            if(json.has("current_health")){
+                                currentHealth.setText("Current Health: " + json.getString("current_health"));
+                                maxHealth.setText("Max Health: " + json.getString("max_health"));
+                                currentMP.setText("Current MP: "+json.getString("current_mp"));
+                                maxMP.setText("Max MP: "+json.getString("max_mp"));
+                                currentStrength.setText("Current Strength: " + json.getString("current_strength"));
+                                maxStrength.setText("Max Strength: " + json.getString("max_strength"));
+                                currentSpeed.setText("Current Speed: " + json.getString("current_speed"));
+                                maxSpeed.setText("Max Speed: " + json.getString("max_speed"));
+                                currentIntelligence.setText("Current Intelligence: " + json.getString("current_intelligence"));
+                                maxIntelligence.setText("Max Intelligence: " + json.getString("max_intelligence"));
+                                currentWisdom.setText("Current Wisdom: " + json.getString("current_wisdom"));
+                                maxWisdom.setText("Max Wisdom: " + json.getString("max_wisdom"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User", getIntent().getStringExtra("playerId"));
+                return params;
+            }
+        };
 
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
+    }
+
+    public void getPersonalWealth(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/selfwealth.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Toast.makeText(ProfileView.this, "Made IT", Toast.LENGTH_LONG).show();
+                            JSONObject json = new JSONObject(response);
+                            if(json.has("Wealth")){
+                                personalWealthTextView.append(" " + json.getString("Wealth"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User", getIntent().getStringExtra("playerId"));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
+    }
+
+    public void getServerWealth(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/allwealth.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
+                            JSONObject json = new JSONObject(response);
+                            if(json.has("Wealth")){
+                                serverWealthTextView.append(" " + json.getString("Wealth"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
     }
 }
 

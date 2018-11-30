@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/currentHealth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Health: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxHealth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Health: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/currentMp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Mp: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxMp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Mp: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/currentStrength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Strength: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxStrength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Strength: "
+        android:textSize="10sp" />
+    <TextView
+        android:id="@+id/currentSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Speed: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Speed: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/currentIntelligence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Intelligence: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxIntelligence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Intelligence: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/currentWisdom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Current Wisdom: "
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/maxWisdom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Max Wisdom: "
+        android:textSize="10sp" />
+
+</LinearLayout>
