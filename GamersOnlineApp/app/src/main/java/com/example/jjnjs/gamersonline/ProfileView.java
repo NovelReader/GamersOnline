@@ -120,6 +120,7 @@ public class ProfileView extends AppCompatActivity{
                             //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
                             JSONObject json = new JSONObject(response);
                             if(json.has("name")){
+                                JSONArray ids = json.getJSONArray("id");
                                 JSONArray names = json.getJSONArray("name");
                                 JSONArray numbers = json.getJSONArray("number");
                                 JSONArray costs = json.getJSONArray("cost");
@@ -127,7 +128,7 @@ public class ProfileView extends AppCompatActivity{
                                 JSONArray images = json.getJSONArray("image");
                                 ArrayList<Item> items = new ArrayList<>();
                                 for(int i = 0; i < names.length(); i++){
-                                    Item newItem = new Item(names.getString(i), numbers.getInt(i),
+                                    Item newItem = new Item(ids.getInt(i), names.getString(i), numbers.getInt(i),
                                             costs.getInt(i), descriptions.getString(i),
                                             images.getString(i));
                                     items.add(newItem);
@@ -170,13 +171,15 @@ public class ProfileView extends AppCompatActivity{
 }
 
 class Item{
+    public int id;
     public String name;
     public int number;
     public int cost;
     public String description;
     public Bitmap image;
 
-    public Item(String name, int number, int cost, String description, String imageText) {
+    public Item(int id, String name, int number, int cost, String description, String imageText) {
+        this.id = id;
         this.name = name;
         this.number = number;
         this.cost = cost;

@@ -14,80 +14,90 @@
         android:alpha=".6">
     </LinearLayout>
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:rowCount="6">
+    <!--
+        android:layout_width="384dp"
+        android:layout_height="510dp"
+     -->
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <GridLayout
+        android:layout_width="384dp"
+        android:layout_height="510dp"
+        android:rowCount="2"
+        android:columnCount="2">
+
+        <GridLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="255dp"
             android:layout_row="0"
             android:layout_column="0"
-            android:text="User name"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:layout_columnSpan="1"
+            android:columnCount="1"
+            android:rowCount="6">
 
-        <ImageView
-            android:id="@+id/profileImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_row="1"
-            android:layout_column="0" />
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:text="User name"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/currencyTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:text="Currency: 1 Billion Shekels"
-            android:textColor="@android:color/black" />
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_row="1"
+                android:layout_column="0" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="5"
-            android:layout_column="0"
-            android:onClick="showStats"
-            android:text="View stats" />
+            <TextView
+                android:id="@+id/currencyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:text="Currency: 1 Billion Shekels"
+                android:textColor="@android:color/black" />
 
-        <TextView
-            android:id="@+id/personalWealth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="3"
-            android:layout_column="0"
-            android:text="Personal Net Worth: "
-            android:textColor="@android:color/black" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="5"
+                android:layout_column="0"
+                android:onClick="showStats"
+                android:text="View stats" />
 
-        <TextView
-            android:id="@+id/serverWealth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="4"
-            android:layout_column="0"
-            android:text="Server Net Worth: "
-            android:textColor="@android:color/black" />
+            <TextView
+                android:id="@+id/personalWealth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:text="Personal Net Worth: "
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/serverWealth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="4"
+                android:layout_column="0"
+                android:text="Server Net Worth: "
+                android:textColor="@android:color/black" />
+        </GridLayout>
 
         <ListView
-            android:layout_width="200dp"
-            android:layout_height="500dp"
-            android:layout_row="0"
-            android:layout_rowSpan="6"
+            android:layout_row="1"
             android:layout_column="1"
-            android:id="@+id/Items">
-
+            android:id="@+id/Items"
+            android:layout_width="384dp"
+            android:layout_height="255dp">
         </ListView>
-    </GridLayout>
 
+    </GridLayout>
 
 
 </android.support.constraint.ConstraintLayout>
