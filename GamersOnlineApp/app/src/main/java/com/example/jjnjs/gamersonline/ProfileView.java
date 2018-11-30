@@ -195,8 +195,33 @@ public class ProfileView extends AppCompatActivity{
         requestQueue.add(stringRequest);
     }
 
-    private void updateInventoryListView(){
+    public void UseItem(View view){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/items.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                            View v = findViewById(R.id.currencyTextView);
+                            showStats(v);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User", getIntent().getStringExtra("playerId"));
+                params.put("ItemId", getIntent().getStringExtra("itemId"));
+                return params;
+            }
+        };
 
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
     }
 
     public void showStats(View view) {
