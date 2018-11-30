@@ -24,16 +24,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileView extends AppCompatActivity{
-    JSONObject profileJSON;
-
-    private String profileName = "";
-    private String profileId = "";
-    private String profileImageRaw = "";
-    private String profileCurrency = "";
+    private ArrayList<Item> inventory = new ArrayList<Item>();
 
     private TextView userNameTextView;
     private TextView userCurrencyTextView;
@@ -59,7 +55,7 @@ public class ProfileView extends AppCompatActivity{
             userCurrencyTextView.setText(
                     "Currency: " + getIntent().getStringExtra("playerMoney") + " shekel");
         }
-        fetchServerImage();
+        //fetchServerImage();
     }
 
     public void fetchServerImage(){
@@ -106,7 +102,79 @@ public class ProfileView extends AppCompatActivity{
         requestQueue.add(stringRequest);
     }
 
+    public void fetchInventory(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/items.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
+                            JSONObject json = new JSONObject(response);
+                            Boolean hasError = json.getBoolean("error");
+                            String message = json.getString("message");
+                            if(hasError){
+                                Toast.makeText(ProfileView.this, message, Toast.LENGTH_LONG).show();
+                            } else {
+                                if(json.has("name")){
+                                    JSONArray names = json.getJSONArray("name");
+                                    JSONArray numbers = json.getJSONArray("number");
+                                    JSONArray costs = json.getJSONArray("cost");
+                                    JSONArray descriptions = json.getJSONArray("description");
+                                    JSONArray images = json.getJSONArray("image");
+
+                                    for(int i = 0; i < names.length(); i++){
+                                        inventory.add(
+                                                new Item(names.getString(i), numbers.getInt(i),
+                                                        costs.getInt(i), descriptions.getString(i),
+                                                        images.getString(i))
+                                        );
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User", getIntent().getStringExtra("playerId"));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
+    }
+
     public void showStats(View view) {
 
+    }
+}
+
+class Item{
+    public String name;
+    public int number;
+    public int cost;
+    public String description;
+    public Bitmap image;
+
+    public Item(String name, int number, int cost, String description, String imageText) {
+        this.name = name;
+        this.number = number;
+        this.cost = cost;
+        this.description = description;
+        byte[] decode = Base64.decode(imageText, Base64.DEFAULT);
+        Bitmap imageBitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+        decode = null;
+        this.image = imageBitmap;
     }
 }
