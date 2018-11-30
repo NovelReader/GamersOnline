@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileView extends AppCompatActivity{
+public class ProfileView extends AppCompatActivity implements OverviewInterface{
     public static ArrayList<Item> inventory = new ArrayList<Item>();
 
     private TextView userNameTextView;
@@ -156,6 +158,7 @@ public class ProfileView extends AppCompatActivity{
                             //Toast.makeText(GamersOnline.this, "Made IT", Toast.LENGTH_LONG).show();
                             JSONObject json = new JSONObject(response);
                             if(json.has("name")){
+                                JSONArray ids = json.getJSONArray("id");
                                 JSONArray names = json.getJSONArray("name");
                                 JSONArray numbers = json.getJSONArray("number");
                                 JSONArray costs = json.getJSONArray("cost");
@@ -164,13 +167,14 @@ public class ProfileView extends AppCompatActivity{
 
                                 for(int i = 0; i < names.length(); i++){
 
-                                    Item newItem = new Item(names.getString(i), numbers.getInt(i),
+                                    Item newItem = new Item(ids.getInt(i), names.getString(i), numbers.getInt(i),
                                             costs.getInt(i), descriptions.getString(i),
                                             images.getString(i));
                                     System.out.println(String.format("\t---Item Name: %s", newItem.name));
                                     System.out.println(String.format("\t---Orig Name: %s", names.getString(i)));
                                     inventory.add(newItem);
                                 }
+                                recycler();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -189,6 +193,7 @@ public class ProfileView extends AppCompatActivity{
                 Map<String, String> params = new HashMap<>();
                 params.put("User", getIntent().getStringExtra("playerId"));
                 return params;
+
             }
         };
 
@@ -196,7 +201,49 @@ public class ProfileView extends AppCompatActivity{
         requestQueue.add(stringRequest);
     }
 
-    private void updateInventoryListView(){
+    public void recycler(){
+        RecyclerView myrv = (RecyclerView) findViewById(R.id.inventory);
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, inventory);
+        myrv.setLayoutManager(new GridLayoutManager(this,1));
+        myrv.setAdapter(myAdapter);
+    }
+
+    public void useItem( int itemID){
+        final String item1 = String.valueOf(itemID);
+        //Toast.makeText(ProfileView.this, String.valueOf(itemID),Toast.LENGTH_LONG).show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://18.219.55.178/GamersOnline/Methods/useitem.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Toast.makeText(ProfileView.this, "Made IT", Toast.LENGTH_LONG).show();
+                            JSONObject json = new JSONObject(response);
+                            View v = findViewById(R.id.inventory);
+                            showStats(v);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("\n\t---\tError response.\n");
+                        System.out.println("\n\t---\t" + error.getMessage() + "\n");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User", getIntent().getStringExtra("playerId"));
+                params.put("ItemId", item1);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProfileView.this);
+        requestQueue.add(stringRequest);
 
     }
 
@@ -317,13 +364,15 @@ public class ProfileView extends AppCompatActivity{
 }
 
 class Item{
+    public int id;
     public String name;
     public int number;
     public int cost;
     public String description;
     public Bitmap image;
 
-    public Item(String name, int number, int cost, String description, String imageText) {
+    public Item(int id, String name, int number, int cost, String description, String imageText) {
+        this.id = id;
         this.name = name;
         this.number = number;
         this.cost = cost;
